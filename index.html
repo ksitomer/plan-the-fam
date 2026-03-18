@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estate Planning Guide for Young Families | Protect Your Children's Future</title>
+    <meta name="description" content="Download our comprehensive estate planning guide for young families. Learn about revocable living trusts, guardian selection, and save $500-$1,500 on attorney fees.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .site-name {
+            font-family: 'Pacifico', cursive;
+            font-size: 7em;
+            font-weight: 400;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+            letter-spacing: 3px;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #1a472a 0%, #2d5f3d 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #c94663;
+            color: white;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .cta-button:hover {
+            background: #b33851;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .price {
+            font-size: 0.9em;
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+        
+        .price .original {
+            text-decoration: line-through;
+            margin-right: 10px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .pain-points {
+            background: #f8f9fa;
+            padding: 60px 20px;
+        }
+        
+        .pain-points h2 {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 50px;
+            color: #1a472a;
+        }
+        
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .pain-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .pain-card h3 {
+            color: #c94663;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .benefits {
+            padding: 60px 20px;
+        }
+        
+        .benefits h2 {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #1a472a;
+        }
+        
+        .benefits-subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 50px;
+        }
+        
+        .benefits-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: start;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .benefit-icon {
+            font-size: 2em;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .benefit-content h3 {
+            color: #1a472a;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+        }
+        
+        .social-proof {
+            background: linear-gradient(135deg, #2d5f3d 0%, #1a472a 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .social-proof h2 {
+            font-size: 2em;
+            margin-bottom: 40px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .stat {
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .contents {
+            padding: 60px 20px;
+            background: #f8f9fa;
+        }
+        
+        .contents h2 {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 50px;
+            color: #1a472a;
+        }
+        
+        .chapters {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            gap: 15px;
+        }
+        
+        .chapter {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #2d5f3d;
+        }
+        
+        .chapter-number {
+            color: #c94663;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+        
+        .guarantee {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .guarantee-box {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff9e6;
+            padding: 40px;
+            border-radius: 15px;
+            border: 3px solid #ffd700;
+        }
+        
+        .guarantee h2 {
+            color: #1a472a;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        
+        .guarantee p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .faq {
+            background: #f8f9fa;
+            padding: 60px 20px;
+        }
+        
+        .faq h2 {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 50px;
+            color: #1a472a;
+        }
+        
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .faq-question {
+            font-weight: 700;
+            color: #1a472a;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+        }
+        
+        .faq-answer {
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        .final-cta {
+            background: linear-gradient(135deg, #1a472a 0%, #2d5f3d 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .final-cta h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .final-cta p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        footer {
+            background: #1a1a1a;
+            color: #ccc;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .site-name {
+                font-size: 4.5em;
+            }
+            
+            .hero h1 {
+                font-size: 2em;
+            }
+            
+            .hero p {
+                font-size: 1.1em;
+            }
+            
+            .pain-points h2, .benefits h2, .contents h2, .faq h2 {
+                font-size: 1.8em;
+            }
+            
+            .stat-number {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="site-name">Plan the Fam</div>
+        <h1>The Essential Estate Planning Guide<br>for Young Families</h1>
+        <p>Protect Your Children's Future Without Breaking the Bank</p>
+        <a href="#purchase" class="cta-button">Download Your Guide Now</a>
+        <p class="price">
+            <span class="original">$99</span>
+            <strong>Just $59 Today</strong>
+        </p>
+    </section>
+
+    <!-- Pain Points Section -->
+    <section class="pain-points">
+        <h2>Are You Putting Off Estate Planning?</h2>
+        <div class="pain-grid">
+            <div class="pain-card">
+                <h3>😰 Overwhelmed by Legal Jargon?</h3>
+                <p>Estate planning feels complicated and confusing. Attorneys speak a different language, and you're not sure where to start.</p>
+            </div>
+            <div class="pain-card">
+                <h3>💰 Shocked by Attorney Fees?</h3>
+                <p>$2,000-$5,000 for a trust? That's a family vacation! But you know your kids need protection.</p>
+            </div>
+            <div class="pain-card">
+                <h3>😟 Worried About Guardians?</h3>
+                <p>Who would raise your children if something happened? The thought keeps you up at night, but you haven't made it official.</p>
+            </div>
+            <div class="pain-card">
+                <h3>⏰ Too Busy to Deal With It?</h3>
+                <p>Between work, kids, and life, there's never a good time. You keep meaning to get to it... someday.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <h2>What You'll Get in This Guide</h2>
+        <p class="benefits-subtitle">Everything you need to create a solid estate plan, save thousands on legal fees, and sleep better at night</p>
+        
+        <div class="benefits-list">
+            <div class="benefit-item">
+                <div class="benefit-icon">📋</div>
+                <div class="benefit-content">
+                    <h3>Complete Asset Inventory Worksheets</h3>
+                    <p>Stop paying attorneys $400/hour to gather information. Our worksheets let you arrive fully prepared, cutting your billable hours in half.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">✅</div>
+                <div class="benefit-content">
+                    <h3>Trust vs. Will Decision Framework</h3>
+                    <p>Know exactly which documents your family needs based on your specific situation. No more guessing or paying for unnecessary services.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">👨‍👩‍👧‍👦</div>
+                <div class="benefit-content">
+                    <h3>Guardian Selection Roadmap</h3>
+                    <p>Make the most important decision with confidence using our proven framework. Includes conversation scripts to discuss with potential guardians.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">💡</div>
+                <div class="benefit-content">
+                    <h3>Attorney Meeting Preparation</h3>
+                    <p>Show up with the right questions, organized documents, and clear goals. Save $500-$1,500 by being prepared.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">⚠️</div>
+                <div class="benefit-content">
+                    <h3>Common Mistakes to Avoid</h3>
+                    <p>Learn from others' expensive errors. Avoid the pitfalls that invalidate trusts or cause family disputes.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">🗺️</div>
+                <div class="benefit-content">
+                    <h3>State-Specific Considerations</h3>
+                    <p>Understand how your state's laws affect your planning, including probate thresholds and estate taxes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <h2>The Numbers Don't Lie</h2>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">$1,200</div>
+                <div class="stat-label">Average Savings on Attorney Fees</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">87%</div>
+                <div class="stat-label">Of Parents Have No Estate Plan</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">6-18</div>
+                <div class="stat-label">Months in Probate Without a Trust</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">$7,000</div>
+                <div class="stat-label">Average Probate Costs Avoided</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Table of Contents -->
+    <section class="contents">
+        <h2>Inside: 10 Comprehensive Chapters</h2>
+        <div class="chapters">
+            <div class="chapter">
+                <span class="chapter-number">Chapter 1:</span> Why Estate Planning Matters for Young Families
+            </div>
+            <div class="chapter">
+                <span class="chapter-number">Chapter 2:</span> Understanding Revocable Living Trusts
+            </div>
+            <div class="chapter">
+                <span class="chapter-number">Chapter 3:</span> Trust vs. Will - What's Right for You?
+            </div>
+            <div class="chapter">
+                <span class="chapter-number">Chapter 4:</span> Essential Documents Every Family Needs
+            </div>
+            <div class="chapter">
+                <span class="chapter-number">Chapter 5:</span> Guardian Selection for Your Children
+            </div>
+            <div class="chapter">
+                <span class="chapter-number">Chapter 6:</span> Asset Inventory Checklist
+            </div>
+            <div class="chapter">
+                <span class="chapter-number">Chapter 7:</span> Preparing for Your Attorney Meeting
+            </div>
+            <div class="chapter">
+                <span class="chapter-number">Chapter 8:</span> Common Mistakes to Avoid
+            </div>
+            <div class="chapter">
+                <span class="chapter-number">Chapter 9:</span> State-Specific Considerations
+            </div>
+            <div class="chapter">
+                <span class="chapter-number">Chapter 10:</span> Next Steps and Action Plan
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <p style="font-size: 1.1em; margin-bottom: 15px;"><strong>Plus Bonus Resources:</strong></p>
+            <p>✓ Guardian Letter of Intent Template<br>
+               ✓ Digital Asset Tracker<br>
+               ✓ Important Contacts List<br>
+               ✓ Document Storage Checklist</p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">Do I still need an attorney after buying this guide?</div>
+                <div class="faq-answer">Yes, and that's the point! This guide prepares you to work with an attorney efficiently. You'll arrive with completed worksheets, clear decisions, and relevant questions—cutting your billable hours (and costs) significantly. Think of this as your attorney meeting preparation guide.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is this legal advice?</div>
+                <div class="faq-answer">No, this guide provides educational information about estate planning concepts and helps you prepare for working with a licensed attorney. It's not a substitute for personalized legal advice from a lawyer in your state.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Will this work for my state?</div>
+                <div class="faq-answer">Yes! While estate planning laws vary by state, the guide covers universal concepts that apply everywhere, plus explains state-specific considerations you should discuss with your local attorney. Chapter 9 specifically addresses different state requirements.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">I don't own a home. Is this still relevant?</div>
+                <div class="faq-answer">Absolutely! If you have children, you need guardian designations and basic estate planning documents regardless of your assets. The guide helps you understand which documents you need based on your situation.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How will I receive the guide?</div>
+                <div class="faq-answer">Immediately after purchase, you'll receive an email with a download link to the complete PDF guide. You can read it on any device or print it out.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I share this with my spouse or family?</div>
+                <div class="faq-answer">Yes! This guide is designed for families to work through together. Share it with your spouse, discuss it with potential guardians, or gift it to friends who need it.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta" id="purchase">
+        <h2>Ready to Protect Your Family's Future?</h2>
+        <p>Download the complete guide today and take the first step toward peace of mind</p>
+        <a href="#" class="cta-button">Get Instant Access for $59</a>
+        <p class="price">
+            <span class="original">Regular Price: $99</span>
+            <strong>Limited Time: $59</strong>
+        </p>
+        <p style="margin-top: 30px; font-size: 0.95em; opacity: 0.9;">
+            ✓ Instant PDF Download<br>
+            ✓ 10 Comprehensive Chapters + Bonus Resources<br>
+            ✓ Ready-to-Use Worksheets
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Plan the Fam. All rights reserved.</p>
+        <p style="margin-top: 10px; font-size: 0.9em;">This guide provides educational information only and is not legal advice. Consult with a licensed attorney in your state for personalized legal guidance.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#purchase') {
+                    // Allow smooth scroll to purchase section
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                } else if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Redirect CTA buttons to checkout page
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'checkout.html';
+            });
+        });
+    </script>
+</body>
+</html>

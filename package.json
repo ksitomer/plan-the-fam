@@ -1,0 +1,17 @@
+{
+  "name": "plan-the-fam",
+  "version": "1.0.0",
+  "description": "Estate Planning Guide for Young Families",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel"
+  },
+  "dependencies": {
+    "stripe": "^14.0.0",
+    "@sendgrid/mail": "^8.1.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

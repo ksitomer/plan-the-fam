@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Plan the Fam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a472a 0%, #2d5f3d 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .site-name {
+            font-family: 'Pacifico', cursive;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .order-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        
+        .order-summary h2 {
+            color: #1a472a;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .product-details {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .product-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .product-features {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .product-features li {
+            padding: 8px 0;
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .product-features li:before {
+            content: "✓ ";
+            color: #2d5f3d;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .price-breakdown {
+            margin: 20px 0;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 1.1em;
+        }
+        
+        .price-row.total {
+            border-top: 2px solid #1a472a;
+            margin-top: 15px;
+            padding-top: 15px;
+            font-weight: 700;
+            font-size: 1.4em;
+            color: #1a472a;
+        }
+        
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .secure-badge svg {
+            width: 20px;
+            height: 20px;
+            fill: #2d5f3d;
+        }
+        
+        .checkout-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .checkout-form h2 {
+            color: #1a472a;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-section h3 {
+            color: #2d5f3d;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            background: white;
+            height: 46px;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #2d5f3d;
+        }
+        
+        .expiry-inputs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .expiry-inputs select {
+            flex: 1;
+        }
+        
+        .expiry-separator {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        #card-element {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+            height: 46px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .stripe-element {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+            height: 46px;
+            display: flex;
+            align-items: center;
+        }
+        
+        #card-cvc {
+            max-width: 120px;
+        }
+        
+        #card-errors {
+            color: #c94663;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .submit-button {
+            width: 100%;
+            background: #c94663;
+            color: white;
+            padding: 16px 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+        
+        .submit-button:hover {
+            background: #b33851;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .submit-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .processing {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+        }
+        
+        .processing.active {
+            display: block;
+        }
+        
+        .stripe-badge {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85em;
+            color: #999;
+        }
+        
+        .error-message {
+            background: #ffe6e6;
+            border-left: 4px solid #c94663;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .error-message.active {
+            display: block;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #2d5f3d;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .site-name {
+                font-size: 2em;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-summary {
+                order: 2;
+            }
+            
+            .checkout-form {
+                order: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="site-name">Plan the Fam</div>
+        <p>Secure Checkout</p>
+    </div>
+
+    <div class="container">
+        <div class="checkout-form">
+            <a href="estate_planning_landing_page.html" class="back-link">← Back to product page</a>
+            
+            <h2>Complete Your Purchase</h2>
+            
+            <div class="error-message" id="error-message"></div>
+            
+            <form id="payment-form">
+                <div class="form-section">
+                    <h3>Contact Information</h3>
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required placeholder="you@example.com">
+                        <small style="color: #666; font-size: 0.85em;">Your receipt and download link will be sent here</small>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Billing Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">First Name *</label>
+                            <input type="text" id="first-name" name="first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name *</label>
+                            <input type="text" id="last-name" name="last-name" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Payment Details</h3>
+                    <div class="form-group">
+                        <label for="card-number">Card Number *</label>
+                        <div id="card-number" class="stripe-element">
+                            <!-- Stripe Card Number Element will be inserted here -->
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="card-expiry-month">Expiration Date *</label>
+                            <div class="expiry-inputs">
+                                <select id="card-expiry-month" name="card-expiry-month" required>
+                                    <option value="">MM</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                                <span class="expiry-separator">/</span>
+                                <select id="card-expiry-year" name="card-expiry-year" required>
+                                    <option value="">YY</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="card-cvc">CVC *</label>
+                            <div id="card-cvc" class="stripe-element">
+                                <!-- Stripe Card CVC Element will be inserted here -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="postal-code">Billing Zip Code *</label>
+                            <input type="text" id="postal-code" name="postal-code" required placeholder="12345" maxlength="10" style="max-width: 150px;">
+                        </div>
+                    </div>
+                    <div id="card-errors" role="alert"></div>
+                </div>
+
+                <button type="submit" class="submit-button" id="submit-button">
+                    Complete Purchase - $59
+                </button>
+                
+                <div class="processing" id="processing">
+                    <p>Processing your payment securely...</p>
+                </div>
+            </form>
+
+            <div class="stripe-badge">
+                Powered by Stripe • Secure 256-bit SSL encryption
+            </div>
+        </div>
+
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            
+            <div class="product-details">
+                <div class="product-name">Estate Planning Guide for Young Families</div>
+                <ul class="product-features">
+                    <li>32-page comprehensive PDF guide</li>
+                    <li>10 detailed chapters</li>
+                    <li>Complete asset inventory worksheets</li>
+                    <li>Guardian selection framework</li>
+                    <li>Attorney preparation materials</li>
+                    <li>Bonus templates and checklists</li>
+                    <li>Instant digital download</li>
+                </ul>
+            </div>
+
+            <div class="price-breakdown">
+                <div class="price-row">
+                    <span>Subtotal</span>
+                    <span>$59.00</span>
+                </div>
+                <div class="price-row total">
+                    <span>Total</span>
+                    <span>$59.00</span>
+                </div>
+            </div>
+
+            <div class="secure-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                </svg>
+                <span><strong>Secure Checkout</strong> - Your payment information is encrypted</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Stripe
+        const stripe = Stripe('pk_test_51TC9jhP1zocONWss8vT5PciqKqZYKHbMHF9VriyAteq2xS5yZr7isCy4HiNtUVYV8pbCPi5ih7NckONmyvPB3VTO00ZUVBRvVc');
+        
+        // Create elements instance
+        const elements = stripe.elements();
+        
+        // Shared styling for all elements
+        const elementStyles = {
+            base: {
+                fontSize: '16px',
+                color: '#333',
+                '::placeholder': {
+                    color: '#aab7c4',
+                },
+            },
+            invalid: {
+                color: '#c94663',
+            },
+        };
+        
+        // Create individual card elements (only number and CVC, not expiry)
+        const cardNumberElement = elements.create('cardNumber', {
+            style: elementStyles,
+            placeholder: '1234 5678 9012 3456',
+        });
+        cardNumberElement.mount('#card-number');
+
+        const cardCvcElement = elements.create('cardCvc', {
+            style: elementStyles,
+        });
+        cardCvcElement.mount('#card-cvc');
+
+        // Handle real-time validation errors from the card Elements
+        const displayError = document.getElementById('card-errors');
+        
+        cardNumberElement.on('change', function(event) {
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+        
+        cardCvcElement.on('change', function(event) {
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        // Handle form submission
+        const form = document.getElementById('payment-form');
+        const submitButton = document.getElementById('submit-button');
+        const processingDiv = document.getElementById('processing');
+        const errorMessage = document.getElementById('error-message');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            // Disable submit button and show processing
+            submitButton.disabled = true;
+            processingDiv.classList.add('active');
+            errorMessage.classList.remove('active');
+
+            // Get form data
+            const email = document.getElementById('email').value;
+            const firstName = document.getElementById('first-name').value;
+            const lastName = document.getElementById('last-name').value;
+            const postalCode = document.getElementById('postal-code').value;
+            const expiryMonth = document.getElementById('card-expiry-month').value;
+            const expiryYear = document.getElementById('card-expiry-year').value;
+
+            // Validate expiry date
+            if (!expiryMonth || !expiryYear) {
+                errorMessage.textContent = 'Please select a valid expiration date.';
+                errorMessage.classList.add('active');
+                submitButton.disabled = false;
+                processingDiv.classList.remove('active');
+                return;
+            }
+
+            try {
+                // Step 1: Call your server to create a PaymentIntent
+                const response = await fetch('/api/create-payment-intent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        email: email,
+                        name: firstName + ' ' + lastName
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to create payment intent');
+                }
+
+                const { clientSecret } = data;
+
+                // Step 2: Confirm the payment with Stripe
+                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardNumberElement,
+                        billing_details: {
+                            name: firstName + ' ' + lastName,
+                            email: email,
+                            address: {
+                                postal_code: postalCode,
+                            },
+                        },
+                    },
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                // Step 3: Payment succeeded - redirect to success page
+                window.location.href = 'success.html?session_id=' + paymentIntent.id;
+
+            } catch (error) {
+                // Show error message
+                errorMessage.textContent = error.message || 'An error occurred. Please try again.';
+                errorMessage.classList.add('active');
+                
+                submitButton.disabled = false;
+                processingDiv.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
