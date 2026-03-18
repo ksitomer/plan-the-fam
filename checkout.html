@@ -148,12 +148,12 @@
         }
         
         .form-section {
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
         
         .form-section h3 {
             color: #2d5f3d;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 1.2em;
         }
         
@@ -166,10 +166,12 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: #333;
+            font-size: 0.95em;
         }
         
         input[type="text"],
         input[type="email"],
+        input[type="tel"],
         select {
             width: 100%;
             padding: 12px 15px;
@@ -183,6 +185,7 @@
         
         input[type="text"]:focus,
         input[type="email"]:focus,
+        input[type="tel"]:focus,
         select:focus {
             outline: none;
             border-color: #2d5f3d;
@@ -228,10 +231,6 @@
             height: 46px;
             display: flex;
             align-items: center;
-        }
-        
-        #card-cvc {
-            max-width: 120px;
         }
         
         #card-errors {
@@ -363,12 +362,30 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="first-name">First Name *</label>
-                            <input type="text" id="first-name" name="first-name" required>
+                            <input type="text" id="first-name" name="first-name" required autocomplete="given-name">
                         </div>
                         <div class="form-group">
                             <label for="last-name">Last Name *</label>
-                            <input type="text" id="last-name" name="last-name" required>
+                            <input type="text" id="last-name" name="last-name" required autocomplete="family-name">
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Street Address *</label>
+                        <input type="text" id="address" name="address" required autocomplete="street-address" placeholder="123 Main Street">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" name="city" required autocomplete="address-level2" placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State *</label>
+                            <input type="text" id="state" name="state" required autocomplete="address-level1" placeholder="CA" maxlength="2">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="postal-code">Zip Code *</label>
+                        <input type="tel" id="postal-code" name="postal-code" required placeholder="12345" maxlength="10" pattern="[0-9]*" inputmode="numeric" autocomplete="postal-code">
                     </div>
                 </div>
 
@@ -417,16 +434,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="card-cvc">CVC *</label>
-                            <div id="card-cvc" class="stripe-element">
-                                <!-- Stripe Card CVC Element will be inserted here -->
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="postal-code">Billing Zip Code *</label>
-                            <input type="text" id="postal-code" name="postal-code" required placeholder="12345" maxlength="10" style="max-width: 150px;">
+                    <div class="form-group">
+                        <label for="card-cvc">CVC *</label>
+                        <div id="card-cvc" class="stripe-element">
+                            <!-- Stripe Card CVC Element will be inserted here -->
                         </div>
                     </div>
                     <div id="card-errors" role="alert"></div>
@@ -503,7 +514,7 @@
             },
         };
         
-        // Create individual card elements (only number and CVC, not expiry)
+        // Create individual card elements
         const cardNumberElement = elements.create('cardNumber', {
             style: elementStyles,
             placeholder: '1234 5678 9012 3456',
@@ -552,6 +563,9 @@
             const email = document.getElementById('email').value;
             const firstName = document.getElementById('first-name').value;
             const lastName = document.getElementById('last-name').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
             const postalCode = document.getElementById('postal-code').value;
             const expiryMonth = document.getElementById('card-expiry-month').value;
             const expiryYear = document.getElementById('card-expiry-year').value;
@@ -592,7 +606,11 @@
                             name: firstName + ' ' + lastName,
                             email: email,
                             address: {
+                                line1: address,
+                                city: city,
+                                state: state,
                                 postal_code: postalCode,
+                                country: 'US',
                             },
                         },
                     },
