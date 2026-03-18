@@ -505,6 +505,7 @@
             base: {
                 fontSize: '16px',
                 color: '#333',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
                 '::placeholder': {
                     color: '#aab7c4',
                 },
@@ -519,17 +520,40 @@
             style: elementStyles,
             placeholder: '1234 5678 9012 3456',
         });
-        cardNumberElement.mount('#card-number');
+        
+        // Mount with error handling
+        try {
+            cardNumberElement.mount('#card-number');
+            console.log('Card number element mounted successfully');
+        } catch (error) {
+            console.error('Error mounting card number:', error);
+        }
 
         const cardCvcElement = elements.create('cardCvc', {
             style: elementStyles,
         });
-        cardCvcElement.mount('#card-cvc');
+        
+        try {
+            cardCvcElement.mount('#card-cvc');
+            console.log('CVC element mounted successfully');
+        } catch (error) {
+            console.error('Error mounting CVC:', error);
+        }
 
         // Handle real-time validation errors from the card Elements
         const displayError = document.getElementById('card-errors');
         
+        // Add ready listeners to know when elements are interactive
+        cardNumberElement.on('ready', function() {
+            console.log('Card number element is ready for input');
+        });
+        
+        cardCvcElement.on('ready', function() {
+            console.log('CVC element is ready for input');
+        });
+        
         cardNumberElement.on('change', function(event) {
+            console.log('Card number changed:', event);
             if (event.error) {
                 displayError.textContent = event.error.message;
             } else {
@@ -538,6 +562,7 @@
         });
         
         cardCvcElement.on('change', function(event) {
+            console.log('CVC changed:', event);
             if (event.error) {
                 displayError.textContent = event.error.message;
             } else {
