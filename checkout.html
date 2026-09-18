@@ -224,13 +224,19 @@
         }
         
         .stripe-element {
-            padding: 12px 15px;
+            padding: 13px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 6px;
             background: white;
-            height: 46px;
-            display: flex;
-            align-items: center;
+        }
+
+        .stripe-element iframe {
+            width: 100% !important;
+            display: block !important;
+        }
+
+        .stripe-element.StripeElement--focus {
+            border-color: #2d5f3d;
         }
         
         #card-errors {
