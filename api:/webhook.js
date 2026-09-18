@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
 
     try {
       // Read the PDF file
-      const pdfPath = path.join(process.cwd(), 'public', 'Estate_Planning_Guide_for_Young_Families.pdf');
+      const pdfPath = path.join(process.cwd(), 'Estate_Planning_Guide_for_Families.pdf');
       const pdfBuffer = fs.readFileSync(pdfPath);
       const pdfBase64 = pdfBuffer.toString('base64');
 
@@ -92,7 +92,7 @@ Questions? Contact us at support@planthefam.com
         attachments: [
           {
             content: pdfBase64,
-            filename: 'Estate_Planning_Guide_for_Young_Families.pdf',
+            filename: 'Estate_Planning_Guide_for_Families.pdf',
             type: 'application/pdf',
             disposition: 'attachment'
           }
