@@ -165,9 +165,25 @@ Questions? Contact us at support@planthefam.com
       console.log('Email sent successfully to:', paymentIntent.metadata.customer_email);
 
     } catch (emailError) {
-      console.error('Failed to send email:', emailError);
-      // Don't return error to Stripe - we don't want them to retry
-      // Log it and handle manually
+      // Surface the real reason in Stripe's "Recent deliveries" response body
+      // so it can be read without digging through Vercel logs.
+      const detail =
+        emailError &&
+        emailError.response &&
+        emailError.response.body &&
+        emailError.response.body.errors
+          ? JSON.stringify(emailError.response.body.errors)
+          : emailError.message;
+
+      console.error('Failed to send email:', detail);
+
+      return res.status(500).json({
+        stage: 'sendgrid',
+        recipient: paymentIntent.metadata.customer_email || '(no email in metadata)',
+        sender: 'kyle.sitomer@gmail.com',
+        apiKeyPresent: Boolean(process.env.SENDGRID_API_KEY),
+        error: detail,
+      });
     }
   }
 
