@@ -7,6 +7,21 @@ const path = require('path');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+// Stripe signature verification requires the RAW request body.
+// Vercel parses JSON bodies by default, which breaks verification (HTTP 400),
+// so we turn the parser off (see module.exports.config at the bottom of this
+// file) and buffer the stream ourselves.
+function readRawBody(readable) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    readable.on('data', (chunk) => {
+      chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+    });
+    readable.on('end', () => resolve(Buffer.concat(chunks)));
+    readable.on('error', reject);
+  });
+}
+
 module.exports = async (req, res) => {
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -14,8 +29,8 @@ module.exports = async (req, res) => {
   let event;
 
   try {
-    // Verify the webhook signature
-    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    const rawBody = await readRawBody(req);
+    event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -28,8 +43,30 @@ module.exports = async (req, res) => {
     console.log('Payment succeeded for:', paymentIntent.metadata.customer_email);
 
     try {
-      // Read the PDF file
-      const pdfPath = path.join(process.cwd(), 'Estate_Planning_Guide_for_Families.pdf');
+      // The guide has been committed under a couple of different names.
+      // Try each so a rename doesn't silently break delivery.
+      const candidates = [
+        'Estate Planning Guide.pdf',
+        'Estate_Planning_Guide_for_Families.pdf',
+        'Estate_Planning_Guide_for_Young_Families.pdf',
+      ];
+
+      let pdfPath = null;
+      for (const name of candidates) {
+        const candidatePath = path.join(process.cwd(), name);
+        if (fs.existsSync(candidatePath)) {
+          pdfPath = candidatePath;
+          break;
+        }
+      }
+
+      if (!pdfPath) {
+        throw new Error(
+          'Guide PDF not found. Looked for: ' + candidates.join(', ')
+        );
+      }
+
+      console.log('Attaching guide from:', pdfPath);
       const pdfBuffer = fs.readFileSync(pdfPath);
       const pdfBase64 = pdfBuffer.toString('base64');
 
@@ -111,4 +148,13 @@ Questions? Contact us at support@planthefam.com
 
   // Return a response to acknowledge receipt of the event
   res.json({ received: true });
+};
+
+// Must come AFTER the module.exports assignment above, otherwise it gets
+// overwritten. Turning off the body parser is what lets Stripe's signature
+// verification see the raw payload.
+module.exports.config = {
+  api: {
+    bodyParser: false,
+  },
 };
