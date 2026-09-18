@@ -191,22 +191,6 @@
             border-color: #2d5f3d;
         }
         
-        .expiry-inputs {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .expiry-inputs select {
-            flex: 1;
-        }
-        
-        .expiry-separator {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #666;
-        }
-        
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -403,41 +387,10 @@
                             <!-- Stripe Card Number Element will be inserted here -->
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="card-expiry-month">Expiration Date *</label>
-                            <div class="expiry-inputs">
-                                <select id="card-expiry-month" name="card-expiry-month" required>
-                                    <option value="">MM</option>
-                                    <option value="01">01</option>
-                                    <option value="02">02</option>
-                                    <option value="03">03</option>
-                                    <option value="04">04</option>
-                                    <option value="05">05</option>
-                                    <option value="06">06</option>
-                                    <option value="07">07</option>
-                                    <option value="08">08</option>
-                                    <option value="09">09</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                </select>
-                                <span class="expiry-separator">/</span>
-                                <select id="card-expiry-year" name="card-expiry-year" required>
-                                    <option value="">YY</option>
-                                    <option value="25">25</option>
-                                    <option value="26">26</option>
-                                    <option value="27">27</option>
-                                    <option value="28">28</option>
-                                    <option value="29">29</option>
-                                    <option value="30">30</option>
-                                    <option value="31">31</option>
-                                    <option value="32">32</option>
-                                    <option value="33">33</option>
-                                    <option value="34">34</option>
-                                    <option value="35">35</option>
-                                </select>
-                            </div>
+                    <div class="form-group">
+                        <label for="card-expiry">Expiration Date *</label>
+                        <div id="card-expiry" class="stripe-element">
+                            <!-- Stripe Card Expiry Element will be inserted here -->
                         </div>
                     </div>
                     <div class="form-group">
@@ -535,6 +488,17 @@
             console.error('Error mounting card number:', error);
         }
 
+        const cardExpiryElement = elements.create('cardExpiry', {
+            style: elementStyles,
+        });
+
+        try {
+            cardExpiryElement.mount('#card-expiry');
+            console.log('Expiry element mounted successfully');
+        } catch (error) {
+            console.error('Error mounting expiry:', error);
+        }
+
         const cardCvcElement = elements.create('cardCvc', {
             style: elementStyles,
         });
@@ -567,6 +531,14 @@
             }
         });
         
+        cardExpiryElement.on('change', function(event) {
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
         cardCvcElement.on('change', function(event) {
             console.log('CVC changed:', event);
             if (event.error) {
@@ -598,17 +570,6 @@
             const city = document.getElementById('city').value;
             const state = document.getElementById('state').value;
             const postalCode = document.getElementById('postal-code').value;
-            const expiryMonth = document.getElementById('card-expiry-month').value;
-            const expiryYear = document.getElementById('card-expiry-year').value;
-
-            // Validate expiry date
-            if (!expiryMonth || !expiryYear) {
-                errorMessage.textContent = 'Please select a valid expiration date.';
-                errorMessage.classList.add('active');
-                submitButton.disabled = false;
-                processingDiv.classList.remove('active');
-                return;
-            }
 
             try {
                 // Step 1: Call your server to create a PaymentIntent
