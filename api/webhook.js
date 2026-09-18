@@ -44,30 +44,55 @@ module.exports = async (req, res) => {
 
     try {
       // The guide has been committed under a couple of different names.
-      // Try each so a rename doesn't silently break delivery.
       const candidates = [
         'Estate Planning Guide.pdf',
         'Estate_Planning_Guide_for_Families.pdf',
         'Estate_Planning_Guide_for_Young_Families.pdf',
       ];
 
-      let pdfPath = null;
+      let pdfBuffer = null;
+
+      // 1. Try the function's own filesystem. Vercel only bundles static
+      //    assets into a function when explicitly configured, so this often
+      //    misses even though the file is in the repo.
       for (const name of candidates) {
         const candidatePath = path.join(process.cwd(), name);
         if (fs.existsSync(candidatePath)) {
-          pdfPath = candidatePath;
+          console.log('Attaching guide from disk:', candidatePath);
+          pdfBuffer = fs.readFileSync(candidatePath);
           break;
         }
       }
 
-      if (!pdfPath) {
+      // 2. Fall back to fetching it over HTTPS from this same deployment,
+      //    which serves the PDF as a static file.
+      if (!pdfBuffer) {
+        const host = req.headers['x-forwarded-host'] || req.headers.host;
+        const proto = req.headers['x-forwarded-proto'] || 'https';
+
+        for (const name of candidates) {
+          const url = `${proto}://${host}/${encodeURIComponent(name)}`;
+          try {
+            const resp = await fetch(url);
+            if (resp.ok) {
+              const arrayBuffer = await resp.arrayBuffer();
+              pdfBuffer = Buffer.from(arrayBuffer);
+              console.log('Attaching guide from URL:', url);
+              break;
+            }
+          } catch (fetchErr) {
+            console.error('Fetch failed for', url, fetchErr.message);
+          }
+        }
+      }
+
+      if (!pdfBuffer) {
         throw new Error(
-          'Guide PDF not found. Looked for: ' + candidates.join(', ')
+          'Guide PDF not found on disk or over HTTP. Looked for: ' +
+            candidates.join(', ')
         );
       }
 
-      console.log('Attaching guide from:', pdfPath);
-      const pdfBuffer = fs.readFileSync(pdfPath);
       const pdfBase64 = pdfBuffer.toString('base64');
 
       // Send email with PDF attachment
