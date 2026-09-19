@@ -31,11 +31,11 @@ module.exports = async (req, res) => {
       currency: 'usd',
       receipt_email: email,
       metadata: {
-        product: 'Estate Planning Guide for Young Families',
+        product: 'Estate Planning Guide for Families',
         customer_name: name,
         customer_email: email,
       },
-      description: 'Estate Planning Guide for Young Families - Digital PDF',
+      description: 'Estate Planning Guide for Families - Digital PDF',
     });
 
     // Return the client secret to the frontend
