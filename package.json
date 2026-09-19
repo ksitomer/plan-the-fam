@@ -8,8 +8,7 @@
     "deploy": "vercel"
   },
   "dependencies": {
-    "stripe": "^14.0.0",
-    "@sendgrid/mail": "^8.1.0"
+    "stripe": "^14.0.0"
   },
   "engines": {
     "node": ">=18.x"
