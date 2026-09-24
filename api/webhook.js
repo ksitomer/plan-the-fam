@@ -87,8 +87,8 @@ module.exports = async (req, res) => {
 
       // Until a custom domain is verified in Resend, sending must come from
       // onboarding@resend.dev, which can only deliver to your own account
-      // address. Once planthefam.com is verified, set RESEND_FROM in Vercel to
-      // something like: Plan the Fam <hello@planthefam.com>
+      // address. Once planthefam.co is verified, set RESEND_FROM in Vercel to
+      // something like: Plan the Fam <hello@planthefam.co>
       const fromAddress =
         process.env.RESEND_FROM || 'Plan the Fam <onboarding@resend.dev>';
 
@@ -170,17 +170,13 @@ Questions? Just reply to this email.
 
       console.log('Email sent successfully to:', customerEmail, '| id:', result.id);
     } catch (emailError) {
-      // Surface the real reason in Stripe's "Recent deliveries" response body
-      // so it can be read without digging through Vercel logs.
+      // Log the failure but acknowledge the event. Returning an error here
+      // would make Stripe retry, and a retry cannot fix a bad address, a
+      // missing PDF, or a provider outage. Failures are logged instead and
+      // handled manually.
       console.error('Failed to send email:', emailError.message);
-
-      return res.status(500).json({
-        stage: 'resend',
-        recipient: customerEmail || '(no email in metadata)',
-        from: process.env.RESEND_FROM || 'Plan the Fam <onboarding@resend.dev>',
-        apiKeyPresent: Boolean(process.env.RESEND_API_KEY),
-        error: emailError.message,
-      });
+      console.error('Recipient was:', customerEmail || '(no email in metadata)');
+      console.error('Payment intent:', paymentIntent.id);
     }
   }
 
