@@ -603,7 +603,7 @@
     <section class="final-cta" id="purchase">
         <h2>Ready to Protect Your Family's Future?</h2>
         <p>Download the complete guide today and take the first step toward peace of mind</p>
-        <a href="#" class="cta-button">Get Instant Access for $49</a>
+        <a href="checkout.html" class="cta-button">Get Instant Access for $49</a>
         <p class="price">
             <span class="original">Regular Price: $70</span>
             <strong>Limited Time: $49</strong>
@@ -666,13 +666,9 @@
             });
         });
         
-        // Redirect CTA buttons to checkout page
-        document.querySelectorAll('.cta-button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = 'checkout.html';
-            });
-        });
+        // CTA buttons now carry real hrefs, so no JS interception is needed.
+        // The hero button scrolls to the offer (#purchase); the final CTA
+        // links directly to checkout.html and still works if JS fails.
     </script>
 </body>
 </html>
